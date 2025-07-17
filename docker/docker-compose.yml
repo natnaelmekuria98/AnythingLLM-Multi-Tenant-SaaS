@@ -1,0 +1,135 @@
+
+
+version: "3.8"
+
+services:
+  archetypals-llm:
+    container_name: archetypals_anythingllm
+    build:
+      context: ../.
+      dockerfile: ./docker/Dockerfile
+      args:
+        ARG_UID: ${UID:-1000}
+        ARG_GID: ${GID:-1000}
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - "./.env.archetypals:/app/server/.env"
+      - "./storage/archetypals:/app/server/storage"
+      - "./collector/hotdir/archetypals:/app/collector/hotdir"
+      - "./collector/outputs/archetypals:/app/collector/outputs"
+    user: "${UID:-1000}:${GID:-1000}"
+    ports:
+      - "3001:3001"
+    networks:
+      - archetypals-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  archetypals-net:
+    driver: bridge
+
+
+
+
+################## for two customer example
+
+# version: "3.8"
+
+# services:
+#   customer1-llm:
+#     container_name: customer1_anythingllm
+#     build:
+#       context: ../.
+#       dockerfile: ./docker/Dockerfile
+#       args:
+#         ARG_UID: ${UID:-1000}
+#         ARG_GID: ${GID:-1000}
+#     cap_add:
+#       - SYS_ADMIN
+
+#     volumes:
+#       - "./.env.customer1:/app/server/.env"  # Make sure it's a file-to-file mount
+#       - "./storage/customer1:/app/server/storage"
+#       - "./collector/hotdir/customer1:/app/collector/hotdir"
+#       - "./collector/outputs/customer1:/app/collector/outputs" 
+   
+#     user: "${UID:-1000}:${GID:-1000}"
+#     ports:
+#       - "3001:3001"
+#     networks:
+#       - anything-llm
+#     extra_hosts:
+#       - "host.docker.internal:host-gateway"
+
+#   customer2-llm:
+#     container_name: customer2_anythingllm
+#     build:
+#       context: ../.
+#       dockerfile: ./docker/Dockerfile
+#       args:
+#         ARG_UID: ${UID:-1000}
+#         ARG_GID: ${GID:-1000}
+#     cap_add:
+#       - SYS_ADMIN
+
+#     volumes:
+#       - "./.env.customer2:/app/server/.env"
+#       - "./storage/customer2:/app/server/storage"
+#       - "./collector/hotdir/customer2:/app/collector/hotdir"
+#       - "./collector/outputs/customer2:/app/collector/outputs"
+#     user: "${UID:-1000}:${GID:-1000}"
+#     ports:
+#       - "3002:3001"
+#     networks:
+#       - anything-llm
+#     extra_hosts:
+#       - "host.docker.internal:host-gateway"
+
+# networks:
+#   anything-llm:
+#     driver: bridge
+
+
+
+# https://test.archetypals.ai/
+
+
+
+###################### original docker-compose for one single instance #####################3
+
+
+# version: "3.8"
+
+# services:
+#   anything-llm:
+#     container_name: anythingllm
+#     build:
+#       context: ../.
+#       dockerfile: ./docker/Dockerfile
+#       args:
+#         ARG_UID: ${UID:-1000}
+#         ARG_GID: ${GID:-1000}
+#     cap_add:
+#       - SYS_ADMIN
+#     volumes:
+#       - "../.env:/app/server/.env"
+#       - "../server/storage:/app/server/storage"
+#       - "../collector/hotdir/:/app/collector/hotdir"
+#       - "../collector/outputs/:/app/collector/outputs"
+#     user: "${UID:-1000}:${GID:-1000}"
+#     ports:
+#       - "3001:3001"
+#     env_file:
+#       - ../.env
+#     networks:
+#       - anything-llm
+#     extra_hosts:
+#       - "host.docker.internal:host-gateway"
+
+# networks:
+#   anything-llm:
+#     driver: bridge
+
+
